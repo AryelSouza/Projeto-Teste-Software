@@ -12,9 +12,8 @@ docs/ - Documentação e evidências de testes
 scripts/ - Scripts auxiliares
 
 ## ⚙️ Como Executar
-
-#1. Instalar dependências:
 ```bash
+#1. Instalar dependências:
 pip install -r requirements.txt
 #2.Iniciar aplicação
 python backend/app.py
