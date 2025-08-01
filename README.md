@@ -5,7 +5,8 @@
 
 Este projeto é um sistema de gerenciamento de biblioteca desenvolvido para demonstrar práticas de teste de software. Inclui testes unitários, de API e end-to-end (E2E).
 
-Funcionalidades
+## Funcionalidades
+
 Login de usuários
 
 Listagem de livros
@@ -30,7 +31,7 @@ pip (gerenciador de pacotes Python)
 
 Google Chrome (para testes E2E)
 
-Instalação
+## Instalação
 Siga os passos abaixo para configurar o ambiente:
 
 ```bash
