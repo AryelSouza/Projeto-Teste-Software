@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Biblioteca</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --success: #4cc9f0;
+            --danger: #f72585;
+            --warning: #f8961e;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --border-radius: 12px;
+            --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            position: relative;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .library-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2.5rem;
+            opacity: 0.7;
+        }
+
+        .section {
+            padding: 30px;
+            background: white;
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light-gray);
+            font-size: 1.7rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h2 i {
+            color: var(--secondary);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-with-icon i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="number"] {
+            width: 100%;
+            padding: 16px 16px 16px 50px;
+            border: 2px solid var(--light-gray);
+            border-radius: var(--border-radius);
+            font-size: 1.1rem;
+            transition: var(--transition);
+        }
+
+        input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+        }
+
+        button:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        button i {
+            font-size: 1.2rem;
+        }
+
+        #loginMessage,
+        #emprestimoMessage {
+            padding: 16px;
+            margin-top: 20px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            font-weight: 500;
+            font-size: 1.1rem;
+            display: none;
+        }
+
+        .success {
+            background: rgba(76, 201, 240, 0.2);
+            color: #1a7a96;
+            border: 2px solid #4cc9f0;
+            display: block;
+        }
+
+        .error {
+            background: rgba(247, 37, 133, 0.1);
+            color: #c2185b;
+            border: 2px solid #f72585;
+            display: block;
+        }
+
+        .book-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .book-card {
+            background: white;
+            border: 2px solid var(--light-gray);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+
+        .book-title {
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+            color: var(--dark);
+        }
+
+        .book-id {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .book-status {
+            font-size: 0.95rem;
+            padding: 8px 15px;
+            border-radius: 30px;
+            display: inline-block;
+            font-weight: 600;
+        }
+
+        .available {
+            background: rgba(76, 201, 240, 0.2);
+            color: #1a7a96;
+        }
+
+        .unavailable {
+            background: rgba(247, 37, 133, 0.1);
+            color: #c2185b;
+        }
+
+        .operations {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .logout-btn {
+            background: var(--danger);
+            max-width: 180px;
+        }
+
+        .logout-btn:hover {
+            background: #d3166d;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: var(--gray);
+            font-size: 1rem;
+            background: var(--light);
+            border-top: 2px solid var(--light-gray);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+            }
+            
+            header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .operations {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .logout-btn {
+                max-width: 100%;
+            }
+            
+            .book-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <i class="fas fa-book-reader library-icon"></i>
+            <h1>Sistema de Gerenciamento de Biblioteca</h1>
+            <p>Teste de Software - Projeto Acadêmico</p>
+        </header>
+        
+        <!-- Seção de Login -->
+        <div id="loginSection">
+            <div class="section">
+                <h2><i class="fas fa-sign-in-alt"></i> Login</h2>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="username"><i class="fas fa-user"></i> Usuário</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="username" placeholder="Digite seu usuário" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password"><i class="fas fa-lock"></i> Senha</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="password" placeholder="Digite sua senha" required>
+                        </div>
+                    </div>
+                    
+                    <button type="submit">
+                        <i class="fas fa-sign-in-alt"></i> Entrar
+                    </button>
+                </form>
+                
+                <div id="loginMessage"></div>
+            </div>
+        </div>
+        
+        <!-- Seção Principal (após login) -->
+        <div id="mainSection" class="hidden">
+            <div class="section">
+                <div class="operations">
+                    <h2><i class="fas fa-book"></i> Operações</h2>
+                    <button class="logout-btn" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i> Sair
+                    </button>
+                </div>
+                
+                <form id="emprestimoForm">
+                    <div class="form-group">
+                        <label for="livroId"><i class="fas fa-bookmark"></i> ID do Livro</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-bookmark"></i>
+                            <input type="number" id="livroId" placeholder="Digite o ID do livro" required>
+                        </div>
+                    </div>
+                    
+                    <button type="submit">
+                        <i class="fas fa-hand-holding-usd"></i> Emprestar Livro
+                    </button>
+                </form>
+                
+                <div id="emprestimoMessage"></div>
+            </div>
+            
+            <div class="section">
+                <h2><i class="fas fa-books"></i> Acervo de Livros</h2>
+                <div id="livrosList" class="book-list">
+                    <!-- Livros serão carregados dinamicamente aqui -->
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Sistema desenvolvido para fins acadêmicos - Teste de Software</p>
+            
+        </footer>
+    </div>
+
+    <script>
+        // Elementos DOM
+        const loginSection = document.getElementById('loginSection');
+        const mainSection = document.getElementById('mainSection');
+        const loginForm = document.getElementById('loginForm');
+        const loginMessage = document.getElementById('loginMessage');
+        const emprestimoForm = document.getElementById('emprestimoForm');
+        const emprestimoMessage = document.getElementById('emprestimoMessage');
+        const livrosList = document.getElementById('livrosList');
+        const logoutBtn = document.getElementById('logoutBtn');
+        
+        // Função para exibir mensagens
+        function showMessage(element, message, isSuccess) {
+    element.textContent = message;
+    element.className = isSuccess ? 'success' : 'error';
+    element.style.display = 'block'; // <-- Aqui está a mágica
+
+    // Limpar mensagem após 3 segundos
+    setTimeout(() => {
+        element.textContent = '';
+        element.className = '';
+        element.style.display = 'none'; // <-- Esconde novamente
+    }, 3000);
+}
+
+        
+        // Função para carregar livros
+        async function loadLivros() {
+            try {
+                const response = await fetch('/livros');
+                if (!response.ok) {
+                    throw new Error('Falha ao carregar livros');
+                }
+                const livros = await response.json();
+                
+                livrosList.innerHTML = '';
+                
+                livros.forEach(livro => {
+                    const bookCard = document.createElement('div');
+                    bookCard.className = 'book-card';
+                    
+                    bookCard.innerHTML = `
+                        <div class="book-title">${livro.titulo}</div>
+                        <div class="book-id">ID: ${livro.id}</div>
+                        <div class="book-status ${livro.disponivel ? 'available' : 'unavailable'}">
+                            <i class="fas ${livro.disponivel ? 'fa-check-circle' : 'fa-times-circle'}"></i>
+                            ${livro.disponivel ? 'Disponível' : 'Emprestado'}
+                        </div>
+                    `;
+                    
+                    livrosList.appendChild(bookCard);
+                });
+            } catch (error) {
+                console.error('Erro ao carregar livros:', error);
+            }
+        }
+        
+        // Evento de login
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password
+                    })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    // Mensagem corrigida: adiciona "com sucesso"
+                    showMessage(loginMessage, `✅ Login realizado com sucesso!`, true);
+                    
+                    // Mostrar seção principal
+                    loginSection.classList.add('hidden');
+                    mainSection.classList.remove('hidden');
+                    
+                    // Carregar livros
+                    await loadLivros();
+                } else {
+                    const errorData = await response.json();
+                    showMessage(loginMessage, `❌ ${errorData.erro || 'Credenciais inválidas'}`, false);
+                }
+            } catch (error) {
+                showMessage(loginMessage, '❌ Erro de conexão com o servidor', false);
+            }
+        });
+        
+        // Evento de empréstimo
+        emprestimoForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const livroId = document.getElementById('livroId').value;
+            
+            try {
+                const response = await fetch(`/emprestar/${livroId}`, {
+                    method: 'POST'
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    showMessage(emprestimoMessage, `✅ ${data.mensagem || 'Livro emprestado com sucesso!'}`, true);
+                    await loadLivros();
+                } else {
+                    const errorData = await response.json();
+                    showMessage(emprestimoMessage, `❌ ${errorData.erro || 'Falha ao emprestar livro'}`, false);
+                }
+            } catch (error) {
+                showMessage(emprestimoMessage, '❌ Erro de conexão com o servidor', false);
+            }
+            
+            // Limpar campo
+            document.getElementById('livroId').value = '';
+        });
+        
+        // Evento de logout
+        logoutBtn.addEventListener('click', () => {
+            loginSection.classList.remove('hidden');
+            mainSection.classList.add('hidden');
+            loginForm.reset();
+            emprestimoMessage.textContent = '';
+            emprestimoMessage.className = '';
+        });
+
+        // Garantir que elementos estejam visíveis quando necessário
+        window.addEventListener('DOMContentLoaded', () => {
+            // Mostrar seção de login por padrão
+            loginSection.classList.remove('hidden');
+            loginMessage.classList.add('hidden');
+            emprestimoMessage.classList.add('hidden');
+            
+            // Adicionar um pequeno atraso para garantir renderização
+            setTimeout(() => {
+                document.getElementById('username').focus();
+            }, 100);
+        });
+    </script>
+</body>
+</html>
