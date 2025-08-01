@@ -3,35 +3,78 @@
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
 ![Flask](https://img.shields.io/badge/Flask-2.2.3-green)
 
-Repositório com implementação e testes de um sistema de gerenciamento de biblioteca
+Este projeto é um sistema de gerenciamento de biblioteca desenvolvido para demonstrar práticas de teste de software. Inclui testes unitários, de API e end-to-end (E2E).
 
-## 📂 Estrutura do Projeto
-backend/ - Implementação do sistema
+Funcionalidades
+Login de usuários
 
-tests/ - Testes automatizados (E2E, unitários e API)
+Listagem de livros
 
-docs/ - Documentação e evidências de testes
+Empréstimo de livros
 
-scripts/ - Scripts auxiliares
+Reset do banco de dados (para testes)
 
-## ⚙️ Como Executar
+Tecnologias
+Backend: Python com Flask
+
+Frontend: HTML, CSS e JavaScript
+
+Testes: pytest, unittest, Selenium
+
+Banco de Dados: Dados em memória (simulado)
+
+Pré-requisitos
+Python 3.10 ou superior
+
+pip (gerenciador de pacotes Python)
+
+Google Chrome (para testes E2E)
+
+Instalação
+Siga os passos abaixo para configurar o ambiente:
+
 ```bash
-#0. Crie e ative o ambiente virtual:
+#1. Clonar o repositório
+git clone https://github.com/seu-usuario/Projeto-Teste-Software.git
+cd projeto-Teste-Software
+
+#2. Criar e ativar ambiente virtual
 python3 -m venv venv
 source venv/bin/activate
 
-#1. Instalar dependências:
+#3. Instalar dependências do sistema (Linux)
+sudo apt install python3.12-venv  # Use sua versão do Python
+
+#4. Instalar dependências do projeto
 pip install -r requirements.txt
 
-#2.Iniciar aplicação
+#5.Executando o Sistema
+#Iniciar o servidor backend
 python backend/app.py
+#O servidor estará disponível em: http://localhost:5000
+```
+## Acessar o front-end
+Abra o navegador e acesse:
+http://localhost:5000/static/index.html
 
-#3.Executar testes
-# Todos os testes
+Credenciais de teste:
+
+Usuário: Ana
+
+Senha: senha123
+
+## Executando os Testes
+Para executar os testes,abra outra janela do terminal enquanto a do servidor ainda esta rodando
+```bash
+#setup do venv na nova janela do terminal
+cd Projeto-Teste-Software
+source venv/bin/activate
+
+#Testes Unitários
+pytest tests/unit/
+#Testes de API
+pytest tests/api/
+#Testes End-to-End (E2E)
+pytest tests/e2e/
+#Executar todos os testes
 pytest
-# Testes específicos
-pytest tests/unit/test_livro.py
-pytest tests/api/test_api.py
-
-#4.Para desativar o ambiente virtual após o uso:
-deactivate
