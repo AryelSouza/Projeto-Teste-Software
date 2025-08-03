@@ -272,6 +272,62 @@
             display: none;
         }
 
+        .admin-tab-nav {
+            display: flex;
+            background: var(--light-gray);
+            border-radius: var(--border-radius);
+            padding: 4px;
+            margin-bottom: 20px;
+        }
+
+        .admin-tab-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            color: var(--gray);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .admin-tab-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .admin-tab-content {
+            display: none;
+        }
+
+        .admin-tab-content.active {
+            display: block;
+        }
+
+        .emprestimo-item {
+            background: var(--light);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 10px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .emprestimo-item.devolvido {
+            border-left-color: var(--success);
+            opacity: 0.7;
+        }
+
+        .devolver-btn {
+            background: var(--success);
+            padding: 8px 16px;
+            font-size: 0.9rem;
+        }
+
+        .devolver-btn:hover {
+            background: #45b7d1;
+        }
+
         @media (max-width: 768px) {
             .container {
                 margin: 10px;
@@ -341,6 +397,56 @@
         
         <!-- Seção Principal (após login) -->
         <div id="mainSection" class="hidden">
+            <!-- Seção de Admin (apenas para administradores) -->
+            <div id="adminSection" class="section hidden">
+                <h2><i class="fas fa-user-shield"></i> Painel Administrativo</h2>
+                
+                <div class="admin-tab-nav">
+                    <button class="admin-tab-btn active" onclick="showAdminTab('addBook')">
+                        <i class="fas fa-plus"></i> Adicionar Livro
+                    </button>
+                    <button class="admin-tab-btn" onclick="showAdminTab('returns')">
+                        <i class="fas fa-undo"></i> Devoluções
+                    </button>
+                    <button class="admin-tab-btn" onclick="showAdminTab('logs')">
+                        <i class="fas fa-history"></i> Logs de Empréstimos
+                    </button>
+                </div>
+
+                <!-- Tab: Adicionar Livro -->
+                <div id="addBookTab" class="admin-tab-content active">
+                    <form id="addBookForm">
+                        <div class="form-group">
+                            <label for="novoTitulo"><i class="fas fa-book"></i> Título do Livro</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-book"></i>
+                                <input type="text" id="novoTitulo" placeholder="Digite o título do livro" required>
+                            </div>
+                        </div>
+                        
+                        <button type="submit">
+                            <i class="fas fa-plus"></i> Adicionar Livro
+                        </button>
+                    </form>
+                    
+                    <div id="addBookMessage"></div>
+                </div>
+
+                <!-- Tab: Devoluções -->
+                <div id="returnsTab" class="admin-tab-content">
+                    <div id="emprestimosAtivos">
+                        <!-- Empréstimos ativos serão carregados aqui -->
+                    </div>
+                </div>
+
+                <!-- Tab: Logs de Empréstimos -->
+                <div id="logsTab" class="admin-tab-content">
+                    <div id="logsEmprestimos">
+                        <!-- Logs serão carregados aqui -->
+                    </div>
+                </div>
+            </div>
+            
             <div class="section">
                 <div class="operations">
                     <h2><i class="fas fa-book"></i> Operações</h2>
@@ -384,12 +490,134 @@
         // Elementos DOM
         const loginSection = document.getElementById('loginSection');
         const mainSection = document.getElementById('mainSection');
+        const adminSection = document.getElementById('adminSection');
         const loginForm = document.getElementById('loginForm');
         const loginMessage = document.getElementById('loginMessage');
         const emprestimoForm = document.getElementById('emprestimoForm');
         const emprestimoMessage = document.getElementById('emprestimoMessage');
+        const addBookForm = document.getElementById('addBookForm');
+        const addBookMessage = document.getElementById('addBookMessage');
         const livrosList = document.getElementById('livrosList');
         const logoutBtn = document.getElementById('logoutBtn');
+        
+        // Variável global para armazenar dados do usuário
+        let currentUser = null;
+        
+        // Função para mostrar/ocultar seção de admin
+        function showAdminSection(show) {
+            if (show) {
+                adminSection.classList.remove('hidden');
+            } else {
+                adminSection.classList.add('hidden');
+            }
+        }
+        
+        // Função para alternar entre tabs de admin
+        function showAdminTab(tabName) {
+            // Remove classe active de todos os botões
+            document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Remove classe active de todos os conteúdos
+            document.querySelectorAll('.admin-tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Adiciona classe active ao botão e conteúdo corretos
+            event.target.classList.add('active');
+            
+            if (tabName === 'addBook') {
+                document.getElementById('addBookTab').classList.add('active');
+            } else if (tabName === 'returns') {
+                document.getElementById('returnsTab').classList.add('active');
+                loadEmprestimosAtivos();
+            } else if (tabName === 'logs') {
+                document.getElementById('logsTab').classList.add('active');
+                loadLogsEmprestimos();
+            }
+        }
+        
+        // Função para carregar empréstimos ativos
+        async function loadEmprestimosAtivos() {
+            try {
+                const response = await fetch('/admin/emprestimos/ativos');
+                if (response.ok) {
+                    const emprestimos = await response.json();
+                    const container = document.getElementById('emprestimosAtivos');
+                    
+                    if (emprestimos.length === 0) {
+                        container.innerHTML = '<p>Nenhum empréstimo ativo encontrado.</p>';
+                        return;
+                    }
+                    
+                    container.innerHTML = emprestimos.map(emp => `
+                        <div class="emprestimo-item">
+                            <strong>Livro:</strong> ${emp.titulo_livro} (ID: ${emp.livro_id})<br>
+                            <strong>Empréstimo ID:</strong> ${emp.id}<br>
+                            <strong>Data:</strong> ${new Date(emp.data_emprestimo).toLocaleString()}<br>
+                            <button class="devolver-btn" onclick="devolverLivro(${emp.id})">
+                                <i class="fas fa-undo"></i> Devolver
+                            </button>
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Erro ao carregar empréstimos ativos:', error);
+            }
+        }
+        
+        // Função para carregar logs de empréstimos
+        async function loadLogsEmprestimos() {
+            try {
+                const response = await fetch('/admin/emprestimos');
+                if (response.ok) {
+                    const emprestimos = await response.json();
+                    const container = document.getElementById('logsEmprestimos');
+                    
+                    if (emprestimos.length === 0) {
+                        container.innerHTML = '<p>Nenhum empréstimo encontrado.</p>';
+                        return;
+                    }
+                    
+                    container.innerHTML = emprestimos.map(emp => `
+                        <div class="emprestimo-item ${emp.data_devolucao ? 'devolvido' : ''}">
+                            <strong>Livro:</strong> ${emp.titulo_livro} (ID: ${emp.livro_id})<br>
+                            <strong>Empréstimo ID:</strong> ${emp.id}<br>
+                            <strong>Data Empréstimo:</strong> ${new Date(emp.data_emprestimo).toLocaleString()}<br>
+                            ${emp.data_devolucao ? 
+                                `<strong>Data Devolução:</strong> ${new Date(emp.data_devolucao).toLocaleString()}<br>
+                                <span style="color: var(--success); font-weight: bold;">✅ Devolvido</span>` : 
+                                '<span style="color: var(--warning); font-weight: bold;">⏳ Em andamento</span>'
+                            }
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Erro ao carregar logs de empréstimos:', error);
+            }
+        }
+        
+        // Função para devolver livro
+        async function devolverLivro(emprestimoId) {
+            try {
+                const response = await fetch(`/admin/devolver/${emprestimoId}`, {
+                    method: 'POST'
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    alert(`✅ ${data.mensagem}`);
+                    loadEmprestimosAtivos();
+                    loadLivros(); // Atualizar lista de livros
+                } else {
+                    const errorData = await response.json();
+                    alert(`❌ ${errorData.erro}`);
+                }
+            } catch (error) {
+                alert('❌ Erro de conexão com o servidor');
+            }
+        }
         
         // Função para exibir mensagens
         function showMessage(element, message, isSuccess) {
@@ -458,12 +686,21 @@
                 
                 if (response.ok) {
                     const data = await response.json();
+                    currentUser = data.usuario; // Salvar dados do usuário
+                    
                     // Mensagem corrigida: adiciona "com sucesso"
                     showMessage(loginMessage, `✅ Login realizado com sucesso!`, true);
                     
                     // Mostrar seção principal
                     loginSection.classList.add('hidden');
                     mainSection.classList.remove('hidden');
+                    
+                    // Mostrar seção de admin se for administrador
+                    if (currentUser.tipo === 'admin') {
+                        showAdminSection(true);
+                    } else {
+                        showAdminSection(false);
+                    }
                     
                     // Carregar livros
                     await loadLivros();
@@ -503,13 +740,46 @@
             document.getElementById('livroId').value = '';
         });
         
+        // Evento de adicionar livro (admin)
+        addBookForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const titulo = document.getElementById('novoTitulo').value;
+            
+            try {
+                const response = await fetch('/admin/livros', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ titulo: titulo })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    showMessage(addBookMessage, `✅ ${data.mensagem}`, true);
+                    await loadLivros(); // Atualizar lista de livros
+                    addBookForm.reset(); // Limpar formulário
+                } else {
+                    const errorData = await response.json();
+                    showMessage(addBookMessage, `❌ ${errorData.erro}`, false);
+                }
+            } catch (error) {
+                showMessage(addBookMessage, '❌ Erro de conexão com o servidor', false);
+            }
+        });
+        
         // Evento de logout
         logoutBtn.addEventListener('click', () => {
+            currentUser = null; // Limpar dados do usuário
             loginSection.classList.remove('hidden');
             mainSection.classList.add('hidden');
+            showAdminSection(false); // Esconder seção de admin
             loginForm.reset();
             emprestimoMessage.textContent = '';
             emprestimoMessage.className = '';
+            addBookMessage.textContent = '';
+            addBookMessage.className = '';
         });
 
         // Garantir que elementos estejam visíveis quando necessário
