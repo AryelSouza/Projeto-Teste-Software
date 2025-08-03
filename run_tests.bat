@@ -20,8 +20,12 @@ python -m pytest tests/unit/ -v
 goto end
 
 :run_api
+echo Iniciando servidor Flask para testes de API...
+start /B python backend/app.py
+timeout /t 7 /nobreak >nul
 echo Executando testes de API...
 python -m pytest tests/api/ -v
+taskkill /F /IM python.exe 2>nul
 goto end
 
 :run_e2e
@@ -35,21 +39,46 @@ goto end
 
 :run_admin
 echo Executando testes de admin...
-python -m pytest tests/unit/test_admin.py tests/api/test_admin_api.py -v
-echo Iniciando servidor para testes E2E de admin...
+echo.
+echo --- Executando testes unitarios de admin ---
+python -m pytest tests/unit/test_admin.py -v
+
+echo.
+echo --- Iniciando servidor Flask para testes de API de admin ---
 start /B python backend/app.py
 timeout /t 7 /nobreak >nul
+echo --- Executando testes de API de admin ---
+python -m pytest tests/api/test_admin_api.py -v
+taskkill /F /IM python.exe 2>nul
+
+echo.
+echo --- Iniciando servidor Flask para testes E2E de admin ---
+start /B python backend/app.py
+timeout /t 7 /nobreak >nul
+echo --- Executando testes E2E de admin ---
 python -m pytest tests/e2e/test_admin_e2e.py tests/e2e/test_usuario_normal.py -v -s
 taskkill /F /IM python.exe 2>nul
 goto end
 
 :run_all
 echo Executando todos os testes...
+echo.
+echo --- Executando testes unitarios ---
 python -m pytest tests/unit/ -v
-python -m pytest tests/api/ -v
-echo Iniciando servidor para testes E2E...
+
+echo.
+echo --- Iniciando servidor Flask para testes de API ---
 start /B python backend/app.py
 timeout /t 7 /nobreak >nul
+echo --- Executando testes de API ---
+python -m pytest tests/api/ -v
+taskkill /F /IM python.exe 2>nul
+
+echo.
+echo --- Iniciando servidor Flask para testes E2E ---
+start /B python backend/app.py
+timeout /t 7 /nobreak >nul
+echo --- Executando testes E2E ---
 python -m pytest tests/e2e/ -v -s
 taskkill /F /IM python.exe 2>nul
 
