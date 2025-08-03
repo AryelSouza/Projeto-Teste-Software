@@ -1,78 +1,196 @@
 # Diagramas do Sistema de Biblioteca
 
-## Diagrama de Casos de Uso
+> 📋 **Navegação Rápida**: Este documento contém múltiplas visualizações dos diagramas do sistema:
+> - **Casos de Uso Simplificado**: Visão por funcionalidades agrupadas
+> - **Fluxo de Operações**: Sequência detalhada das operações
+> - **Casos de Uso Tradicional**: Formato clássico UML
+> - **Diagrama de Classes**: Estrutura completa do sistema
+
+---
+
+## Diagrama de Casos de Uso Simplificado
+
+### Visão Geral dos Atores e Funcionalidades
 
 ```mermaid
-graph TD
+graph LR
     %% Atores
     UC[👤 Usuário Comum]
     AD[👨‍💼 Administrador]
-    SY[🖥️ Sistema]
     
-    %% Casos de Uso Principais
-    subgraph "Sistema de Biblioteca"
-        UC01[UC01: Fazer Login]
-        UC02[UC02: Listar Livros]
-        UC03[UC03: Emprestar Livro]
-        UC04[UC04: Visualizar Status]
-        UC05[UC05: Fazer Logout]
-        
-        %% Casos de Uso Administrativos
-        UC06[UC06: Adicionar Livro]
-        UC07[UC07: Gerenciar Catálogo]
-        UC08[UC08: Processar Devolução]
-        UC09[UC09: Visualizar Logs]
-        UC10[UC10: Empréstimos Ativos]
-        UC11[UC11: Gerar Relatórios]
-        
-        %% Casos de Uso do Sistema
-        UC12[UC12: Validar Credenciais]
-        UC13[UC13: Controlar Acesso]
-        UC14[UC14: Registrar Empréstimo]
-        UC15[UC15: Atualizar Status]
+    %% Funcionalidades Principais
+    subgraph "🔐 Autenticação"
+        LOGIN[Fazer Login]
+        LOGOUT[Fazer Logout]
     end
     
-    %% Relacionamentos Usuário Comum
-    UC --> UC01
-    UC --> UC02
-    UC --> UC03
-    UC --> UC04
-    UC --> UC05
+    subgraph "📚 Gestão de Livros"
+        LISTAR[Listar Livros]
+        EMPRESTAR[Emprestar Livro]
+        STATUS[Ver Status]
+    end
     
-    %% Relacionamentos Administrador
-    AD --> UC01
-    AD --> UC02
-    AD --> UC06
-    AD --> UC07
-    AD --> UC08
-    AD --> UC09
-    AD --> UC10
-    AD --> UC11
-    AD --> UC05
+    subgraph "👨‍💼 Administração"
+        ADD[Adicionar Livro]
+        DEVOLVER[Processar Devolução]
+        RELATORIO[Ver Relatórios]
+    end
     
-    %% Includes
-    UC01 -.-> UC12
-    UC01 -.-> UC13
-    UC03 -.-> UC14
-    UC03 -.-> UC15
-    UC08 -.-> UC15
+    %% Relacionamentos
+    UC --> LOGIN
+    UC --> LISTAR
+    UC --> EMPRESTAR
+    UC --> STATUS
+    UC --> LOGOUT
     
-    %% Extends
-    UC02 -.-> UC04
-    UC09 -.-> UC11
+    AD --> LOGIN
+    AD --> LISTAR
+    AD --> ADD
+    AD --> DEVOLVER
+    AD --> RELATORIO
+    AD --> LOGOUT
     
-    %% Herança
-    AD -.-> UC
-
-    classDef userCase fill:#e1f5fe,stroke:#0277bd,stroke-width:2px
-    classDef adminCase fill:#fff3e0,stroke:#f57c00,stroke-width:2px
-    classDef systemCase fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px
     classDef actor fill:#ffcdd2,stroke:#d32f2f,stroke-width:2px
+    classDef auth fill:#e8eaf6,stroke:#3f51b5,stroke-width:2px
+    classDef user fill:#e1f5fe,stroke:#0277bd,stroke-width:2px
+    classDef admin fill:#fff3e0,stroke:#f57c00,stroke-width:2px
     
-    class UC01,UC02,UC03,UC04,UC05 userCase
-    class UC06,UC07,UC08,UC09,UC10,UC11 adminCase
-    class UC12,UC13,UC14,UC15 systemCase
-    class UC,AD,SY actor
+    class UC,AD actor
+    class LOGIN,LOGOUT auth
+    class LISTAR,EMPRESTAR,STATUS user
+    class ADD,DEVOLVER,RELATORIO admin
+```
+
+### Fluxo de Operações Detalhado
+
+```mermaid
+flowchart TD
+    START([👤 Usuário acessa sistema])
+    
+    LOGIN{🔐 Login válido?}
+    TIPO{👤 Tipo de usuário?}
+    
+    %% Fluxo Usuário Comum
+    USER_MENU[📋 Menu Principal]
+    VER_LIVROS[📚 Ver Livros Disponíveis]
+    EMPRESTAR[📖 Emprestar Livro]
+    VER_STATUS[📊 Ver Meus Empréstimos]
+    
+    %% Fluxo Administrador
+    ADMIN_MENU[👨‍💼 Menu Administrativo]
+    ADD_LIVRO[➕ Adicionar Livro]
+    DEVOLVER[↩️ Processar Devolução]
+    RELATORIO[📈 Ver Relatórios]
+    
+    %% Operações do Sistema
+    VALIDAR[🔍 Validar Disponibilidade]
+    REGISTRAR[💾 Registrar Empréstimo]
+    ATUALIZAR[🔄 Atualizar Status]
+    
+    LOGOUT([🚪 Logout])
+    
+    START --> LOGIN
+    LOGIN -->|Sim| TIPO
+    LOGIN -->|Não| START
+    
+    TIPO -->|Usuário| USER_MENU
+    TIPO -->|Admin| ADMIN_MENU
+    
+    USER_MENU --> VER_LIVROS
+    USER_MENU --> EMPRESTAR
+    USER_MENU --> VER_STATUS
+    USER_MENU --> LOGOUT
+    
+    ADMIN_MENU --> VER_LIVROS
+    ADMIN_MENU --> ADD_LIVRO
+    ADMIN_MENU --> DEVOLVER
+    ADMIN_MENU --> RELATORIO
+    ADMIN_MENU --> LOGOUT
+    
+    EMPRESTAR --> VALIDAR
+    VALIDAR --> REGISTRAR
+    REGISTRAR --> ATUALIZAR
+    ATUALIZAR --> USER_MENU
+    
+    DEVOLVER --> ATUALIZAR
+    
+    classDef startEnd fill:#c8e6c9,stroke:#4caf50,stroke-width:3px
+    classDef decision fill:#fff3e0,stroke:#ff9800,stroke-width:2px
+    classDef userAction fill:#e3f2fd,stroke:#2196f3,stroke-width:2px
+    classDef adminAction fill:#fce4ec,stroke:#e91e63,stroke-width:2px
+    classDef systemAction fill:#f3e5f5,stroke:#9c27b0,stroke-width:2px
+    
+    class START,LOGOUT startEnd
+    class LOGIN,TIPO,VALIDAR decision
+    class USER_MENU,VER_LIVROS,EMPRESTAR,VER_STATUS userAction
+    class ADMIN_MENU,ADD_LIVRO,DEVOLVER,RELATORIO adminAction
+    class REGISTRAR,ATUALIZAR systemAction
+```
+
+## Diagrama de Casos de Uso Tradicional
+
+```mermaid
+graph TB
+    %% Atores
+    USER((👤<br/>Usuário<br/>Comum))
+    ADMIN((👨‍💼<br/>Administrador))
+    
+    %% Sistema
+    subgraph SISTEMA["📚 Sistema de Biblioteca"]
+        
+        subgraph AUTH["🔐 Autenticação"]
+            LOGIN[Login]
+            LOGOUT[Logout]
+        end
+        
+        subgraph CATALOGO["📋 Catálogo"]
+            LISTAR[Listar Livros]
+            BUSCAR[Buscar Livro]
+        end
+        
+        subgraph EMPRESTIMO["📖 Empréstimos"]
+            EMPRESTAR[Emprestar Livro]
+            STATUS[Ver Status]
+        end
+        
+        subgraph ADMIN_FUNC["👨‍💼 Administração"]
+            ADD[Adicionar Livro]
+            DEVOLVER[Devolver Livro]
+            RELATORIOS[Relatórios]
+        end
+    end
+    
+    %% Relacionamentos Usuário
+    USER --- LOGIN
+    USER --- LISTAR
+    USER --- BUSCAR
+    USER --- EMPRESTAR
+    USER --- STATUS
+    USER --- LOGOUT
+    
+    %% Relacionamentos Admin (herda do usuário + funções admin)
+    ADMIN --- LOGIN
+    ADMIN --- LISTAR
+    ADMIN --- BUSCAR
+    ADMIN --- ADD
+    ADMIN --- DEVOLVER
+    ADMIN --- RELATORIOS
+    ADMIN --- LOGOUT
+    
+    %% Estilos
+    classDef ator fill:#ffebee,stroke:#c62828,stroke-width:3px
+    classDef sistema fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    classDef auth fill:#e8eaf6,stroke:#3f51b5,stroke-width:2px
+    classDef catalogo fill:#e0f2f1,stroke:#00695c,stroke-width:2px
+    classDef emprestimo fill:#fff3e0,stroke:#ef6c00,stroke-width:2px
+    classDef admin fill:#fce4ec,stroke:#ad1457,stroke-width:2px
+    
+    class USER,ADMIN ator
+    class SISTEMA sistema
+    class LOGIN,LOGOUT auth
+    class LISTAR,BUSCAR catalogo
+    class EMPRESTAR,STATUS emprestimo
+    class ADD,DEVOLVER,RELATORIOS admin
 ```
 
 ## Diagrama de Classes

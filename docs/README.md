@@ -7,6 +7,10 @@ Este diretório contém toda a documentação técnica do Sistema de Biblioteca.
 ### 📐 Diagramas UML
 - **[diagramas/](diagramas/)** - Diagramas do sistema
   - **[diagramas_sistema.md](diagramas/diagramas_sistema.md)** - Diagramas Mermaid (visualização direta no GitHub)
+    - Casos de uso simplificado e interativo
+    - Fluxo de operações detalhado
+    - Diagrama de casos de uso tradicional
+    - Diagrama de classes completo
   - **[plantuml/](diagramas/plantuml/)** - Código-fonte dos diagramas PlantUML
     - `diagrama_casos_uso.puml` - Diagrama de casos de uso completo
     - `diagrama_classes.puml` - Diagrama de classes completo  
