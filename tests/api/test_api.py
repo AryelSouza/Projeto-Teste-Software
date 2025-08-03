@@ -33,16 +33,25 @@ class TestAPI(unittest.TestCase):
         self.assertIn("Credenciais inválidas", response.json()['erro'])
     
     def test_emprestimo_sucesso(self):
-        response = requests.post(f"{BASE_URL}/emprestar/1")
+        response = requests.post(
+            f"{BASE_URL}/emprestar/1",
+            json={"usuario_id": 1}
+        )
         self.assertEqual(response.status_code, 200)
         self.assertIn("sucesso", response.json()['mensagem'])
         
-        response = requests.post(f"{BASE_URL}/emprestar/1")
+        response = requests.post(
+            f"{BASE_URL}/emprestar/1",
+            json={"usuario_id": 1}
+        )
         self.assertEqual(response.status_code, 400)
         self.assertIn("indisponível", response.json()['erro'])
     
     def test_emprestimo_livro_inexistente(self):
-        response = requests.post(f"{BASE_URL}/emprestar/999")
+        response = requests.post(
+            f"{BASE_URL}/emprestar/999",
+            json={"usuario_id": 1}
+        )
         self.assertEqual(response.status_code, 404)
         self.assertIn("não encontrado", response.json()['erro'].lower())
 
