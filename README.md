@@ -5,7 +5,7 @@
 ![Selenium](https://img.shields.io/badge/Selenium-4.15.0-orange)
 ![Tests](https://img.shields.io/badge/Tests-13_Passing-brightgreen)
 
-Este projeto é um sistema de gerenciamento de biblioteca desenvolvido para demonstrar práticas de teste de software. Inclui testes unitários, de API e end-to-end (E2E) com **ChromeDriver funcionando perfeitamente**.
+Este projeto é um sistema de gerenciamento de biblioteca desenvolvido para demonstrar práticas de teste de software. Inclui testes unitários, de API e end-to-end (E2E).
 
 ## ✨ Funcionalidades
 
@@ -140,41 +140,6 @@ Quando tudo estiver funcionando corretamente:
 - ✅ **Testes de API:** 4 testes passando  
 - ✅ **Testes E2E:** 4 testes passando
 - 🎉 **Total:** 13 testes passando
-
-## 🛠️ Solução de Problemas
-
-### Problema: ChromeDriver não funciona
-```bash
-# Limpar cache do WebDriver Manager
-rm -rf ~/.wdm  # Linux/Mac
-# rmdir /s %USERPROFILE%\.wdm  # Windows
-
-# O webdriver-manager baixará automaticamente a versão correta
-```
-
-### Problema: Servidor não responde
-```bash
-# Verificar se a porta 5000 está ocupada
-netstat -an | findstr "5000"  # Windows  
-# lsof -i :5000               # Linux/Mac
-
-# Matar processos na porta 5000 se necessário
-taskkill /F /IM python.exe    # Windows
-# pkill -f "python backend/app.py"  # Linux/Mac
-```
-
-### Problema: Ambiente virtual corrompido
-```bash
-# Remover e recriar ambiente virtual
-rmdir /s venv                 # Windows
-# rm -rf venv                 # Linux/Mac
-
-python -m venv venv
-.\venv\Scripts\activate       # Windows
-# source venv/bin/activate    # Linux/Mac
-
-pip install -r requirements.txt
-```
 
 ## 🏆 Status do Projeto
 - ✅ ChromeDriver funcionando corretamente
