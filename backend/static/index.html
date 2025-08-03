@@ -721,7 +721,13 @@
             
             try {
                 const response = await fetch(`/emprestar/${livroId}`, {
-                    method: 'POST'
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        usuario_id: currentUser ? currentUser.id : 1
+                    })
                 });
                 
                 if (response.ok) {

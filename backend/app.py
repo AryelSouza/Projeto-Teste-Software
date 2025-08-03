@@ -58,8 +58,9 @@ def listar_livros():
 @app.route('/emprestar/<int:livro_id>', methods=['POST'])
 def emprestar_livro(livro_id):
     try:
-        data = request.json
-        usuario_id = data.get('usuario_id') if data else None
+        # Aceitar dados JSON opcionais para compatibilidade
+        data = request.json if request.json else {}
+        usuario_id = data.get('usuario_id', 1)  # Usar ID padrão se não fornecido
         
         livro = next((l for l in livros if l['id'] == livro_id), None)
         if not livro:
@@ -146,12 +147,14 @@ def listar_emprestimos_ativos():
 
 @app.route('/reset', methods=['POST'])
 def reset_database():
-    global livros
+    global livros, emprestimos, proximo_id_livro
     try:
         livros = [
             {"id": 1, "titulo": "Python Testing", "disponivel": True},
             {"id": 2, "titulo": "Clean Code", "disponivel": True}
         ]
+        emprestimos = []  # Limpar também os empréstimos
+        proximo_id_livro = 3  # Resetar contador de ID
         return jsonify({"mensagem": "Banco de dados resetado"}), 200
     except Exception as e:
         return jsonify({"erro": f"Erro ao resetar banco: {str(e)}"}), 500
