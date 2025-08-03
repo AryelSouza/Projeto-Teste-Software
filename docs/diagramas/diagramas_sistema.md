@@ -158,14 +158,14 @@ classDiagram
     }
     
     class APIEndpoints {
-        +POST /login
-        +GET /livros
-        +POST /emprestar/{id}
-        +POST /admin/livros
-        +POST /admin/devolver/{id}
-        +GET /admin/emprestimos
-        +GET /admin/emprestimos/ativos
-        +POST /reset
+        +postLogin()
+        +getLivros()
+        +postEmprestarLivro()
+        +postAdminLivros()
+        +postAdminDevolver()
+        +getAdminEmprestimos()
+        +getAdminEmprestimosAtivos()
+        +postReset()
     }
     
     %% Especializações
