@@ -25,10 +25,10 @@ Este projeto é um sistema de gerenciamento de biblioteca desenvolvido para demo
 ### 📐 Diagramas UML
 | Diagrama | Versão Interativa | Imagem |
 |----------|------------------|---------|
-| **Casos de Uso** | [Mermaid](docs/diagramas/diagramas_sistema.md) | [PNG](docs/images/diagrama_casos_uso.png) \| [SVG](docs/images/diagrama_casos_uso.svg) |
-| **Classes** | [Mermaid](docs/diagramas/diagramas_sistema.md) | [PNG](docs/images/diagrama_classes.png) \| [SVG](docs/images/diagrama_classes.svg) |
-| **Casos de Uso (Simples)** | [PlantUML](docs/diagramas/plantuml/casos_uso_simples.puml) | [PNG](docs/images/casos_uso_simples.png) \| [SVG](docs/images/casos_uso_simples.svg) |
-| **Classes (Simples)** | [PlantUML](docs/diagramas/plantuml/classes_simples.puml) | [PNG](docs/images/classes_simples.png) \| [SVG](docs/images/classes_simples.svg) |
+| **Casos de Uso** | [Mermaid](docs/diagramas/diagramas_sistema.md) | [PNG](docs/images/casosDeUso.png) \| [SVG](docs/images/casosDeUso.svg) |
+| **Classes** | [Mermaid](docs/diagramas/diagramas_sistema.md) | [PNG](docs/images/diagramaClasses.png) \| [SVG](docs/images/diagramaClasses.svg) |
+| **Casos de Uso (Simples)** | [PlantUML](docs/diagramas/plantuml/casos_uso_simples.puml) | [PNG](docs/images/casosUsoSimples.png) \| [SVG](docs/images/casosUsoSimples.svg) |
+| **Classes (Simples)** | [PlantUML](docs/diagramas/plantuml/classes_simples.puml) | [PNG](docs/images/classesSimples.png) \| [SVG](docs/images/classesSimples.svg) |
 
 ### 📚 Documentação Completa
 - 📝 **[Especificação de Casos de Uso](docs/casos-de-uso/casos_de_uso.md)** - Detalhamento completo dos casos de uso
