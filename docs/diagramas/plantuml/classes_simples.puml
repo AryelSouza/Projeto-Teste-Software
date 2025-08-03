@@ -1,0 +1,81 @@
+@startuml classesSimples
+
+title Sistema de Biblioteca - Diagrama de Classes
+
+class Usuario {
+    -id: int
+    -nome: string
+    -senha: string
+    -ativo: boolean
+    -tipo: string
+    +validarCredenciais(): boolean
+    +isAdmin(): boolean
+}
+
+class Livro {
+    -id: int
+    -titulo: string
+    -disponivel: boolean
+    +emprestar(): boolean
+    +devolver(): boolean
+    +isDisponivel(): boolean
+}
+
+class Emprestimo {
+    -id: int
+    -livro_id: int
+    -usuario_id: int
+    -data_emprestimo: datetime
+    -data_devolucao: datetime
+    +devolver(): void
+    +isDevolvido(): boolean
+}
+
+class BibliotecaController {
+    -livros: List<Livro>
+    -usuarios: List<Usuario>
+    -emprestimos: List<Emprestimo>
+    +login(): dict
+    +listarLivros(): List<Livro>
+    +emprestarLivro(): dict
+}
+
+class AdminController {
+    +adicionarLivro(): dict
+    +devolverLivro(): dict
+    +listarEmprestimos(): List<Emprestimo>
+    +listarEmprestimosAtivos(): List<Emprestimo>
+}
+
+class WebInterface {
+    +showMessage(): void
+    +loadLivros(): void
+    +showLoginForm(): void
+    +showMainSection(): void
+}
+
+class UsuarioComum {
+    +podeEmprestar(): boolean
+}
+
+class Administrador {
+    +podeGerenciarSistema(): boolean
+}
+
+' Relacionamentos
+BibliotecaController *-- Livro
+BibliotecaController *-- Usuario
+BibliotecaController *-- Emprestimo
+
+Emprestimo --> Livro
+Emprestimo --> Usuario
+Usuario "1" -- "0..*" Emprestimo
+
+Usuario <|-- UsuarioComum
+Usuario <|-- Administrador
+
+WebInterface ..> BibliotecaController
+WebInterface ..> AdminController
+AdminController ..> BibliotecaController
+
+@enduml

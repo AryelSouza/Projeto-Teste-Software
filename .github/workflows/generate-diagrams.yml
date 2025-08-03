@@ -1,0 +1,64 @@
+name: Gerar Diagramas UML
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'docs/*.puml'
+  pull_request:
+    branches: [ main, master ]
+    paths:
+      - 'docs/*.puml'
+  workflow_dispatch: # Permite execução manual
+
+jobs:
+  generate-diagrams:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+        
+    - name: Download PlantUML
+      run: |
+        wget https://github.com/plantuml/plantuml/releases/latest/download/plantuml-1.2024.0.jar -O plantuml.jar
+        
+    - name: Generate PNG diagrams
+      run: |
+        # Criar diretório para imagens
+        mkdir -p docs/images
+        
+        # Gerar imagens dos diagramas principais
+        java -jar plantuml.jar -tpng -o images docs/diagramas/plantuml/diagrama_casos_uso.puml
+        java -jar plantuml.jar -tpng -o images docs/diagramas/plantuml/diagrama_classes.puml
+        
+        # Gerar imagens dos diagramas simplificados
+        java -jar plantuml.jar -tpng -o images docs/diagramas/plantuml/casos_uso_simples.puml
+        java -jar plantuml.jar -tpng -o images docs/diagramas/plantuml/classes_simples.puml
+        
+        # Listar arquivos gerados
+        ls -la docs/images/
+        
+    - name: Generate SVG diagrams
+      run: |
+        # Gerar versões SVG para melhor qualidade
+        java -jar plantuml.jar -tsvg -o images docs/diagramas/plantuml/diagrama_casos_uso.puml
+        java -jar plantuml.jar -tsvg -o images docs/diagramas/plantuml/diagrama_classes.puml
+        java -jar plantuml.jar -tsvg -o images docs/diagramas/plantuml/casos_uso_simples.puml
+        java -jar plantuml.jar -tsvg -o images docs/diagramas/plantuml/classes_simples.puml
+        
+    - name: Commit and push generated images
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add docs/images/
+        git diff --staged --quiet || git commit -m "🎨 Atualizar diagramas UML gerados automaticamente"
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

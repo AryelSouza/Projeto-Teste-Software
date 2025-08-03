@@ -1,0 +1,199 @@
+@startuml diagramaClasses
+title Sistema de Biblioteca - Diagrama de Classes
+
+skinparam backgroundColor #FAFAFA
+skinparam class {
+    BackgroundColor #E8F5E8
+    BorderColor #2E7D32
+    ArrowColor #1976D2
+}
+skinparam stereotypeABackgroundColor #FFE082
+skinparam stereotypeCBackgroundColor #FFCDD2
+skinparam stereotypeEBackgroundColor #C8E6C9
+
+' === CLASSES DE MODELO (ENTITY) ===
+
+class Usuario <<Entity>> {
+    - id: int
+    - nome: string
+    - senha: string
+    - ativo: boolean
+    - tipo: string
+    --
+    + __init__(id, nome, senha)
+    + validarCredenciais(senha): boolean
+    + isAdmin(): boolean
+    + ativar(): void
+    + desativar(): void
+}
+
+class Livro <<Entity>> {
+    - id: int
+    - titulo: string
+    - disponivel: boolean
+    --
+    + __init__(id, titulo)
+    + emprestar(): boolean
+    + devolver(): boolean
+    + isDisponivel(): boolean
+    + setDisponivel(status): void
+}
+
+class Emprestimo <<Entity>> {
+    - id: int
+    - livro_id: int
+    - titulo_livro: string
+    - usuario_id: int
+    - data_emprestimo: datetime
+    - data_devolucao: datetime
+    --
+    + __init__(livro_id, usuario_id)
+    + devolver(): void
+    + isDevolvido(): boolean
+    + getDuracao(): int
+}
+
+' === CLASSES DE CONTROLE (CONTROLLER) ===
+
+class BibliotecaController <<Controller>> {
+    - livros: List<Livro>
+    - usuarios: List<Usuario>
+    - emprestimos: List<Emprestimo>
+    - proximo_id_livro: int
+    --
+    + login(username, password): dict
+    + listarLivros(): List<Livro>
+    + emprestarLivro(livro_id, usuario_id): dict
+    + resetDatabase(): dict
+}
+
+class AdminController <<Controller>> {
+    --
+    + adicionarLivro(titulo): dict
+    + devolverLivro(emprestimo_id): dict
+    + listarEmprestimos(): List<Emprestimo>
+    + listarEmprestimosAtivos(): List<Emprestimo>
+    + validarPrivilegios(usuario): boolean
+}
+
+class AuthController <<Controller>> {
+    --
+    + autenticar(username, password): Usuario
+    + validarCredenciais(usuario, senha): boolean
+    + controlarAcesso(usuario, recurso): boolean
+    + logout(usuario): void
+}
+
+' === CLASSES DE INTERFACE (BOUNDARY) ===
+
+class WebInterface <<Boundary>> {
+    - loginForm: HTMLElement
+    - mainSection: HTMLElement
+    - adminSection: HTMLElement
+    --
+    + showMessage(message, isSuccess): void
+    + loadLivros(): void
+    + showLoginForm(): void
+    + showMainSection(): void
+    + showAdminSection(): void
+    + logout(): void
+}
+
+class APIEndpoints <<Boundary>> {
+    --
+    + POST /login
+    + GET /livros
+    + POST /emprestar/{id}
+    + POST /admin/livros
+    + POST /admin/devolver/{id}
+    + GET /admin/emprestimos
+    + GET /admin/emprestimos/ativos
+    + POST /reset
+}
+
+' === CLASSES UTILITÁRIAS ===
+
+class DatabaseSimulator <<Utility>> {
+    + {static} initializeLivros(): List<Livro>
+    + {static} initializeUsuarios(): List<Usuario>
+    + {static} resetToDefaults(): void
+}
+
+class ValidationUtils <<Utility>> {
+    + {static} validateRequired(field): boolean
+    + {static} validateCredentials(user, pass): boolean
+    + {static} sanitizeInput(input): string
+}
+
+' === RELACIONAMENTOS ===
+
+' Composição e Agregação
+BibliotecaController *-- Livro : gerencia
+BibliotecaController *-- Usuario : controla
+BibliotecaController *-- Emprestimo : registra
+
+' Dependências
+AdminController ..> BibliotecaController : usa
+AuthController ..> Usuario : autentica
+WebInterface ..> BibliotecaController : comunica com
+WebInterface ..> AdminController : comunica com
+APIEndpoints ..> BibliotecaController : expõe
+APIEndpoints ..> AdminController : expõe
+
+' Associações
+Emprestimo --> Livro : refere-se a
+Emprestimo --> Usuario : pertence a
+Usuario "1" -- "0..*" Emprestimo : realiza
+
+' Herança/Especialização
+Usuario <|-- UsuarioComum
+Usuario <|-- Administrador
+
+class UsuarioComum <<Entity>> {
+    + podeEmprestar(): boolean
+}
+
+class Administrador <<Entity>> {
+    + podeGerenciarSistema(): boolean
+    + podeVisualizarLogs(): boolean
+}
+
+' Utilização
+BibliotecaController ..> DatabaseSimulator : inicializa
+BibliotecaController ..> ValidationUtils : valida
+AdminController ..> ValidationUtils : valida
+
+' === NOTAS EXPLICATIVAS ===
+
+note top of Usuario
+    **Classe base para autenticação**
+    - Armazena credenciais e tipo
+    - Controla estado ativo/inativo
+    - Base para especialização
+end note
+
+note top of Livro
+    **Entidade principal do sistema**
+    - Controla disponibilidade
+    - Estado muda com empréstimos
+end note
+
+note top of Emprestimo
+    **Registro de transações**
+    - Log histórico completo
+    - Rastreamento de devoluções
+end note
+
+note right of BibliotecaController
+    **Controller principal**
+    - Gerencia todas as operações básicas
+    - Mantém estado da aplicação
+end note
+
+note right of AdminController
+    **Operações administrativas**
+    - Requer privilégios especiais
+    - Funcionalidades avançadas
+end note
+
+@enduml

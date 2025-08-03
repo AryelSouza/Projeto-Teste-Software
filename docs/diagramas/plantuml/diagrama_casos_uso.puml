@@ -1,0 +1,102 @@
+@startuml casosDeUso
+title Sistema de Biblioteca - Diagrama de Casos de Uso
+
+skinparam backgroundColor #FAFAFA
+skinparam actor {
+    BackgroundColor #E1F5FE
+    BorderColor #0277BD
+}
+skinparam usecase {
+    BackgroundColor #E8F5E8
+    BorderColor #2E7D32
+    FontSize 12
+}
+skinparam rectangle {
+    BackgroundColor #FFF3E0
+    BorderColor #F57C00
+}
+
+title Sistema de Biblioteca - Diagrama de Casos de Uso
+
+' Atores
+actor "Usuário Comum" as Usuario #lightblue
+actor "Administrador" as Admin #lightcoral
+actor "Sistema" as Sistema #lightgray
+
+' Retângulo do sistema
+rectangle "Sistema de Biblioteca" {
+    ' Casos de uso comuns
+    usecase "UC01: Fazer Login" as UC01
+    usecase "UC02: Listar Livros" as UC02
+    usecase "UC03: Emprestar Livro" as UC03
+    usecase "UC04: Visualizar Status do Livro" as UC04
+    usecase "UC05: Fazer Logout" as UC05
+    
+    ' Casos de uso administrativos
+    usecase "UC06: Adicionar Livro" as UC06
+    usecase "UC07: Gerenciar Catálogo" as UC07
+    usecase "UC08: Processar Devolução" as UC08
+    usecase "UC09: Visualizar Logs de Empréstimos" as UC09
+    usecase "UC10: Listar Empréstimos Ativos" as UC10
+    usecase "UC11: Gerar Relatórios" as UC11
+    
+    ' Casos de uso do sistema
+    usecase "UC12: Validar Credenciais" as UC12
+    usecase "UC13: Controlar Acesso" as UC13
+    usecase "UC14: Registrar Empréstimo" as UC14
+    usecase "UC15: Atualizar Status do Livro" as UC15
+}
+
+' Relacionamentos - Usuário Comum
+Usuario --> UC01 : acessa
+Usuario --> UC02 : consulta
+Usuario --> UC03 : solicita
+Usuario --> UC04 : verifica
+Usuario --> UC05 : executa
+
+' Relacionamentos - Administrador
+Admin --> UC01 : acessa
+Admin --> UC02 : consulta
+Admin --> UC06 : executa
+Admin --> UC07 : gerencia
+Admin --> UC08 : processa
+Admin --> UC09 : visualiza
+Admin --> UC10 : consulta
+Admin --> UC11 : gera
+Admin --> UC05 : executa
+
+' Relacionamentos do Sistema (includes e extends)
+UC01 ..> UC12 : <<include>>
+UC01 ..> UC13 : <<include>>
+UC03 ..> UC14 : <<include>>
+UC03 ..> UC15 : <<include>>
+UC08 ..> UC15 : <<include>>
+
+' Relacionamentos de extensão
+UC02 ..> UC04 : <<extend>>
+UC09 ..> UC11 : <<extend>>
+
+' Generalizações
+Admin --|> Usuario : herda
+
+' Notas explicativas
+note right of UC01
+  **Autenticação necessária**
+  - Validação de credenciais
+  - Controle de acesso por tipo
+end note
+
+note right of UC03
+  **Regras de Negócio**
+  - Livro deve estar disponível
+  - Usuário deve estar ativo
+  - Registro automático do empréstimo
+end note
+
+note right of UC06
+  **Apenas Administradores**
+  - Validação de privilégios
+  - Dados obrigatórios
+end note
+
+@enduml

@@ -3,17 +3,37 @@
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
 ![Flask](https://img.shields.io/badge/Flask-2.3.3-green)
 ![Selenium](https://img.shields.io/badge/Selenium-4.15.0-orange)
-![Tests](https://img.shields.io/badge/Tests-13_Passing-brightgreen)
+![Tests](https://img.shields.io/badge/Tests-33_Passing-brightgreen)
+![Coverage](https://img.shields.io/badge/Coverage-100%25-brightgreen)
+![Documentation](https://img.shields.io/badge/Documentation-Complete-blue)
 
 Este projeto é um sistema de gerenciamento de biblioteca desenvolvido para demonstrar práticas de teste de software. Inclui testes unitários, de API e end-to-end (E2E).
 
 ## ✨ Funcionalidades
 
-- 🔐 Login de usuários
-- 📚 Listagem de livros  
-- 📖 Empréstimo de livros
-- 🔄 Reset do banco de dados (para testes)
-- 🧪 Suite completa de testes automatizados
+- 🔐 **Login diferenciado** - Sistema com usuários comuns e administradores
+- 📚 **Catálogo de livros** - Listagem e consulta de disponibilidade  
+- 📖 **Sistema de empréstimos** - Processo completo de empréstimo de livros
+- �‍💼 **Painel administrativo** - CRUD de livros, devoluções e relatórios
+- 🔐 **Controle de acesso** - Permissões baseadas em tipo de usuário
+- 📊 **Logs e relatórios** - Histórico completo de empréstimos
+- 🔄 **Reset do sistema** - Funcionalidade para testes automatizados
+- 🧪 **Suite completa de testes** - Unit, API e E2E automatizados
+
+## 📋 Documentação Técnica
+
+### 📐 Diagramas UML
+| Diagrama | Versão Interativa | Imagem |
+|----------|------------------|---------|
+| **Casos de Uso** | [Mermaid](docs/diagramas/diagramas_sistema.md) | [PNG](docs/images/diagrama_casos_uso.png) \| [SVG](docs/images/diagrama_casos_uso.svg) |
+| **Classes** | [Mermaid](docs/diagramas/diagramas_sistema.md) | [PNG](docs/images/diagrama_classes.png) \| [SVG](docs/images/diagrama_classes.svg) |
+| **Casos de Uso (Simples)** | [PlantUML](docs/diagramas/plantuml/casos_uso_simples.puml) | [PNG](docs/images/casos_uso_simples.png) \| [SVG](docs/images/casos_uso_simples.svg) |
+| **Classes (Simples)** | [PlantUML](docs/diagramas/plantuml/classes_simples.puml) | [PNG](docs/images/classes_simples.png) \| [SVG](docs/images/classes_simples.svg) |
+
+### 📚 Documentação Completa
+- 📝 **[Especificação de Casos de Uso](docs/casos-de-uso/casos_de_uso.md)** - Detalhamento completo dos casos de uso
+- 📊 **[Relatório de Testes](docs/relatorio_teste.md)** - Resultados e evidências dos testes
+- 📋 **[Requisitos do Sistema](docs/requisitos.md)** - Requisitos funcionais e não funcionais
 
 ## 🛠️ Tecnologias
 - **Backend:** Python com Flask

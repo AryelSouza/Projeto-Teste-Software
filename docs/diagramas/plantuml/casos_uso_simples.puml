@@ -1,0 +1,55 @@
+@startuml casosUsoSimples
+
+title Sistema de Biblioteca - Casos de Uso
+
+left to right direction
+
+actor "Usuario Comum" as user
+actor "Administrador" as admin
+
+rectangle Sistema {
+    usecase "Fazer Login" as login
+    usecase "Listar Livros" as listar
+    usecase "Emprestar Livro" as emprestar
+    usecase "Visualizar Status" as status
+    usecase "Fazer Logout" as logout
+    
+    usecase "Adicionar Livro" as adicionar
+    usecase "Processar Devolucao" as devolver
+    usecase "Visualizar Logs" as logs
+    usecase "Emprestimos Ativos" as ativos
+    
+    usecase "Validar Credenciais" as validar
+    usecase "Controlar Acesso" as controle
+    usecase "Registrar Emprestimo" as registrar
+}
+
+' Relacionamentos Usuario Comum
+user --> login
+user --> listar
+user --> emprestar
+user --> status
+user --> logout
+
+' Relacionamentos Administrador
+admin --> login
+admin --> listar
+admin --> adicionar
+admin --> devolver
+admin --> logs
+admin --> ativos
+admin --> logout
+
+' Includes
+login ..> validar : <<include>>
+login ..> controle : <<include>>
+emprestar ..> registrar : <<include>>
+
+' Extends
+listar ..> status : <<extend>>
+logs ..> ativos : <<extend>>
+
+' Heranca
+admin --|> user
+
+@enduml
