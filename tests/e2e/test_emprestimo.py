@@ -1,13 +1,14 @@
 import unittest
 import requests
 import time
+import os
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from webdriver_manager.chrome import ChromeDriverManager
 
 class TestEmprestimo(unittest.TestCase):
     def setUp(self):
@@ -15,21 +16,33 @@ class TestEmprestimo(unittest.TestCase):
         chrome_options.add_argument("--headless")
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")
+        chrome_options.add_argument("--disable-gpu")
+        chrome_options.add_argument("--disable-web-security")
+        chrome_options.add_argument("--allow-running-insecure-content")
+        chrome_options.add_argument("--disable-extensions")
         chrome_options.add_argument("--window-size=1920,1080")
         
+        try:
+            print("Instalando ChromeDriver...")
+            driver_path = ChromeDriverManager().install()
+            print(f"✓ ChromeDriver instalado: {driver_path}")
+        except Exception as e:
+            print(f"✗ Erro ao instalar ChromeDriver: {e}")
+            raise e
+        
         self.driver = webdriver.Chrome(
-            service=Service(ChromeDriverManager().install()),
+            service=Service(driver_path),
             options=chrome_options
         )
         self.base_url = "http://localhost:5000"
-        self.wait = WebDriverWait(self.driver, 15)  # Aumentado para 15 segundos
+        self.wait = WebDriverWait(self.driver, 15)
         
         # Resetar banco de dados antes de começar
         requests.post(f"{self.base_url}/reset")
         
         # Realizar login
         print("Realizando login...")
-        self.driver.get(f"{self.base_url}/static/index.html")
+        self.driver.get(f"{self.base_url}/")
         
         # Esperar página carregar
         self.wait.until(EC.presence_of_element_located((By.ID, "loginForm")))

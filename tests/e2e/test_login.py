@@ -1,12 +1,13 @@
 import unittest
 import time
+import os
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from webdriver_manager.chrome import ChromeDriverManager
 
 class TestLogin(unittest.TestCase):
     def setUp(self):
@@ -14,19 +15,31 @@ class TestLogin(unittest.TestCase):
         chrome_options.add_argument("--headless")
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")
+        chrome_options.add_argument("--disable-gpu")
+        chrome_options.add_argument("--disable-web-security")
+        chrome_options.add_argument("--allow-running-insecure-content")
+        chrome_options.add_argument("--disable-extensions")
         chrome_options.add_argument("--window-size=1920,1080")
         
+        try:
+            print("Instalando ChromeDriver...")
+            driver_path = ChromeDriverManager().install()
+            print(f"✓ ChromeDriver instalado: {driver_path}")
+        except Exception as e:
+            print(f"✗ Erro ao instalar ChromeDriver: {e}")
+            raise e
+        
         self.driver = webdriver.Chrome(
-            service=Service(ChromeDriverManager().install()),
+            service=Service(driver_path),
             options=chrome_options
         )
         self.base_url = "http://localhost:5000"
-        self.wait = WebDriverWait(self.driver, 15)  # Aumentado para 15 segundos
+        self.wait = WebDriverWait(self.driver, 15)
     
     def test_login_sucesso(self):
         driver = self.driver
         print("Acessando página de login...")
-        driver.get(f"{self.base_url}/static/index.html")
+        driver.get(f"{self.base_url}/")
         
         # Esperar página carregar
         self.wait.until(EC.presence_of_element_located((By.ID, "loginForm")))
@@ -38,18 +51,18 @@ class TestLogin(unittest.TestCase):
         
         print("Aguardando mensagem...")
         try:
-            # Verificar se mensagem aparece
-            message_element = self.wait.until(
-                EC.visibility_of_element_located((By.ID, "loginMessage"))
-            )
-            print(f"Mensagem encontrada: {message_element.text}")
-            
-            # Verificar se seção principal aparece
+            # Verificar se a seção principal aparece (indicando login bem-sucedido)
+            print("Aguardando seção principal aparecer...")
             self.wait.until(EC.visibility_of_element_located((By.ID, "mainSection")))
             
-            self.assertIn("sucesso", message_element.text.lower())
+            # Verificar se a seção de login foi escondida
+            login_section = driver.find_element(By.ID, "loginSection")
+            self.assertTrue("hidden" in login_section.get_attribute("class"), 
+                          "Seção de login deveria estar escondida após login")
+            
             print("Login bem-sucedido!")
             driver.save_screenshot("docs/evidencias/login_sucesso.png")
+            
         except Exception as e:
             print(f"Erro durante o teste: {str(e)}")
             print("Conteúdo atual da página:")
@@ -60,7 +73,7 @@ class TestLogin(unittest.TestCase):
     def test_login_falha_campos_vazios(self):
         driver = self.driver
         print("Testando login com campos vazios...")
-        driver.get(f"{self.base_url}/static/index.html")
+        driver.get(f"{self.base_url}/")
         
         # Esperar página carregar
         self.wait.until(EC.presence_of_element_located((By.ID, "loginForm")))

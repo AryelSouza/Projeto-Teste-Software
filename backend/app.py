@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 
 app = Flask(__name__, static_folder='static')
@@ -13,6 +13,14 @@ usuarios = [
     {"id": 1, "nome": "Ana", "ativo": True, "senha": "senha123"},
     {"id": 2, "nome": "João", "ativo": True, "senha": "abc123"}
 ]
+
+@app.route('/')
+def home():
+    return send_from_directory(app.static_folder, 'index.html')
+
+@app.route('/static/<path:filename>')
+def static_files(filename):
+    return send_from_directory(app.static_folder, filename)
 
 @app.route('/login', methods=['POST'])
 def login():

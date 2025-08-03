@@ -1,0 +1,16 @@
+@echo off
+echo Iniciando servidor Flask...
+start /B python backend/app.py
+
+echo Aguardando servidor inicializar...
+timeout /t 3 /nobreak >nul
+
+echo Executando testes...
+pytest
+
+echo.
+echo Pressione qualquer tecla para finalizar o servidor...
+pause >nul
+
+echo Finalizando processos do servidor...
+taskkill /F /IM python.exe /FI "WINDOWTITLE eq backend/app.py" 2>nul
