@@ -156,10 +156,10 @@ pytest tests/e2e/test_login.py::TestLogin::test_login_sucesso -v
 
 ## 📊 Resultados Esperados
 Quando tudo estiver funcionando corretamente:
-- ✅ **Testes Unitários:** 5 testes passando
-- ✅ **Testes de API:** 4 testes passando  
-- ✅ **Testes E2E:** 4 testes passando
-- 🎉 **Total:** 13 testes passando
+- ✅ **Testes Unitários:** 12 testes passando
+- ✅ **Testes de API:** 11 testes passando  
+- ✅ **Testes E2E:** 10 testes passando
+- 🎉 **Total:** 33 testes passando
 
 ## 🏆 Status do Projeto
 - ✅ ChromeDriver funcionando corretamente
