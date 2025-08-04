@@ -84,7 +84,7 @@
 - ✅ **Automação de Testes** - Scripts para execução contínua
 
 ## Tecnologias e Ferramentas:
-- **Backend**: Flask 2.3.3, Python 3.13+
+- **Backend**: Flask 2.3.3, Python 3.12+
 - **Frontend**: HTML5, CSS3, JavaScript ES6+
 - **Testes**: pytest 8.4.1, unittest, Selenium 4.15.0
 - **Automação**: ChromeDriver, WebDriver Manager

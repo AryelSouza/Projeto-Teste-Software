@@ -147,12 +147,12 @@
 
 | Requisito | Implementação | Testes Unitários | Testes API | Testes E2E | Status |
 |-----------|---------------|------------------|------------|------------|---------|
-| RF01 | ✅ backend/app.py | ✅ test_usuario.py | ✅ test_api.py | ✅ test_login.py | 100% |
-| RF02 | ✅ backend/app.py, frontend | ✅ test_admin.py | ✅ test_admin_api.py | ✅ test_usuario_normal.py | 100% |
-| RF03 | ✅ backend/app.py | ✅ test_admin.py | ✅ test_admin_api.py | ✅ test_admin_e2e.py | 100% |
-| RF04 | ✅ backend/app.py | ✅ test_livro.py, test_admin.py | ✅ test_api.py | ✅ test_emprestimo.py | 100% |
-| RF05 | ✅ backend/app.py | ✅ test_admin.py | ✅ test_admin_api.py | ✅ test_admin_e2e.py | 100% |
-| RF06 | ✅ backend/app.py | ✅ test_admin.py | ✅ test_admin_api.py | ✅ test_admin_e2e.py | 100% |
+| RF01 | ✅ backend/app.py | ✅ unit/test_usuario.py | ✅ api/test_api.py | ✅ e2e/test_login.py | 100% |
+| RF02 | ✅ backend/app.py, frontend | ✅ unit/test_admin.py | ✅ api/test_admin_api.py | ✅ e2e/test_usuario_normal.py | 100% |
+| RF03 | ✅ backend/app.py | ✅ unit/test_admin.py, unit/test_livro.py | ✅ api/test_admin_api.py | ✅ e2e/test_admin_e2e.py | 100% |
+| RF04 | ✅ backend/app.py | ✅ unit/test_livro.py, unit/test_admin.py | ✅ api/test_api.py | ✅ e2e/test_admin_e2e.py | 100% |
+| RF05 | ✅ backend/app.py | ✅ unit/test_admin.py | ✅ api/test_admin_api.py | ✅ e2e/test_admin_e2e.py | 100% |
+| RF06 | ✅ backend/app.py | ✅ unit/test_admin.py | ✅ api/test_admin_api.py | ✅ e2e/test_admin_e2e.py | 100% |
 | RF07 | ✅ backend/static/index.html | - | - | ✅ Todos os testes E2E | 100% |
 | RF08 | ✅ Todos os módulos | ✅ Todos os testes | ✅ Todos os testes | ✅ Todos os testes | 100% |
 | RF09 | ✅ backend/app.py | ✅ Usado em setup | ✅ Usado em setup | ✅ Usado em setup | 100% |
