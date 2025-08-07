@@ -9,6 +9,21 @@
 6. **RF06**: Reset do banco de dados
 7. **RF07**: Validação de dados e tratamento de erros
 
+## Justificativas:
+1. **RF01**: O login é a porta de entrada para qualquer sistema com controle de acesso. Garantir que tanto administradores quanto usuários comuns possam autenticar-se corretamente é essencial para segurança, usabilidade e segregação de permissões. Testar diferentes perfis permite validar o comportamento esperado para cada tipo de usuário.
+
+2. **RF02**: A listagem é uma funcionalidade central e de uso frequente. É importante garantir que os dados armazenados estejam sendo corretamente exibidos, com os filtros e ordenações funcionando conforme esperado. Além disso, é um dos pontos de acesso mais visíveis ao usuário, o que o torna crítico para a experiência de uso. 
+
+3. **RF03**: A função de empréstimo é o coração do sistema de biblioteca. Seu funcionamento afeta diretamente a integridade do banco de dados e a experiência do usuário. Testes devem garantir que regras como limite de empréstimos, verificação de disponibilidade e prazos estejam corretas.
+
+4. **RF04**: Esse módulo é usado pelos administradores para manter o sistema atualizado e funcional. Ele envolve operações de criação, leitura, atualização e exclusão de livros, além de registrar operações relevantes como empréstimos e devoluções. É um ponto crítico para garantir consistência e auditoria.
+
+5. **RF05**: Diferenciar o que um usuário comum e um administrador podem ver/fazer é essencial para a segurança e o cumprimento das políticas de uso. Testar o controle de acesso garante que funcionalidades sensíveis não estejam disponíveis para usuários não autorizados.
+
+6. **RF06**: Esta funcionalidade é importante para ambientes de teste e manutenção, permitindo restaurar o sistema para um estado inicial. É necessário garantir que o reset funcione corretamente e com segurança, sem comprometer dados em produção ou causar falhas inesperadas.
+
+7. **RF07**: Um sistema robusto deve validar todas as entradas e tratar erros com clareza. Testar este aspecto garante que usuários não consigam corromper dados com entradas inválidas e que mensagens de erro sejam informativas. Essa validação melhora tanto a segurança quanto a usabilidade da aplicação.
+
 ## Resultados dos testes:
 
 ### Testes Unitários (12 testes)
