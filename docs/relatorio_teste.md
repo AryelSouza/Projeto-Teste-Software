@@ -7,6 +7,19 @@
 4. RF04: Reset do banco de dados
 5. RF05: Validação de dados
 
+## Justificativas:
+1. RF01: O login é a porta de entrada do sistema e garante que apenas usuários autenticados tenham acesso às funcionalidades protegidas. É uma funcionalidade crítica para a segurança, controle de sessão e privacidade de dados. Falhas aqui comprometem todo o sistema.
+
+2. RF02: É uma das funcionalidades mais utilizadas no sistema e está diretamente ligada à experiência do usuário. Testá-la garante que a busca e apresentação dos dados do acervo estejam corretas e acessíveis. Erros nessa parte impactam a usabilidade e confiabilidade da aplicação.
+
+3. RF03: Essa funcionalidade representa o núcleo da operação de uma biblioteca. Testes garantem que o processo de empréstimo funcione corretamente, respeitando as regras (como disponibilidade de livros, usuário com pendências, etc.). Erros aqui podem levar a inconsistências no banco de dados ou falhas nos relatórios.
+
+4. RF04: Embora não esteja diretamente relacionada ao uso comum, essa funcionalidade é essencial para ambientes de teste e manutenção. Foi testada para garantir que o sistema possa retornar ao estado inicial de forma segura, sem deixar registros órfãos ou dados corrompidos.
+
+5. RF05: Garantir que os dados inseridos pelo usuário estejam corretos é fundamental para a integridade do sistema. Esta funcionalidade foi testada para prevenir entradas inválidas, como campos obrigatórios vazios, e-mails mal formatados, ou tentativas de injeção de código. Testá-la ajuda a evitar falhas de segurança e dados inconsistentes.
+
+
+
 ## Resultados dos testes:
 
 ### Testes Unitários
