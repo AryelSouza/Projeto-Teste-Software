@@ -143,6 +143,17 @@
   - Scripts de instalação automatizados
 - **Status**: ✅ Atendido e Testado
 
+## Requisitos Legais
+ **1. LGPD - Lei Geral de Proteção de Dados (Lei nº 13.709/2018)**
+- O sistema deve solicitar consentimento para uso de dados pessoais.
+- Deve permitir que o usuário visualize, edite e exclua seus dados.
+- Os dados devem ser armazenados de forma segura.
+
+ **2. Código de Defesa do Consumidor (Lei nº 8.078/1990)**
+- Informações sobre taxas de atraso e uso do sistema devem estar acessíveis.
+- O histórico de operações do usuário deve estar disponível para consulta.
+
+
 ## Matriz de Rastreabilidade
 
 | Requisito | Implementação | Testes Unitários | Testes API | Testes E2E | Status |
