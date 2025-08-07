@@ -6,6 +6,7 @@
 ![Tests](https://img.shields.io/badge/Tests-13_Passing-brightgreen)
 
 Este projeto é um sistema de gerenciamento de biblioteca desenvolvido para demonstrar práticas de teste de software. Inclui testes unitários, de API e end-to-end (E2E).
+
 Projetado por:Aryel Souza,Daniel Neto,Daniel Barbosa
 
 ## ✨ Funcionalidades
